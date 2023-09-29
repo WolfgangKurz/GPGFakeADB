@@ -87,13 +87,14 @@ static void Swipe(IntPtr hWnd, int x1, int y1, int x2, int y2, int duration) {
 	if (hWnd == IntPtr.Zero) return;
 
 	const int interval = 4;
-	var durTick = duration * TimeSpan.TicksPerSecond;
+	var durTick = duration * TimeSpan.TicksPerMillisecond;
+	durTick /= 4; // boost swipe
 
 	var begin = DateTime.Now.Ticks;
 	var end = DateTime.Now.Ticks + durTick;
 
 	var size = GameSize(hWnd);
-	SendMessage(hWnd, WM_MOUSEMOVE, 1, pt2LPARAM(x1, y1, w, h, size.Width, size.Height));
+	SendMessage(hWnd, WM_LBUTTONDOWN, 1, pt2LPARAM(x1, y1, w, h, size.Width, size.Height));
 
 	while (DateTime.Now.Ticks < end) {
 		var elapsed = DateTime.Now.Ticks - begin;
